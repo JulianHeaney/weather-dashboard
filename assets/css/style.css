@@ -1,0 +1,89 @@
+:root {
+  --lt-blue: #5aa2e9;
+  --md-blue: #3b6ec3;
+  --dk-blue: #230855;
+  --deep-blue: #33475b;
+  --grey: #b7b7b7;
+  --transparent-blue: #60b4fd3c;
+}
+
+body {
+  margin: 0px;
+}
+
+header {
+  width: 100%;
+  background-color: #230855;
+  background-image: linear-gradient(90deg, var(--md-blue), var(--dk-blue));
+}
+
+header h1 {
+  color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px;
+  margin: 0px;
+}
+
+.container-fluid {
+  padding-left: 0px;
+}
+
+.current-weather {
+  border: 2px solid black;
+  border-radius: 5px;
+  margin: 15px 0px;
+}
+
+#weather-conditions {
+  font-size: 18px;
+}
+
+.weather-icon {
+  filter: drop-shadow(0px 1px 2px black)
+}
+
+
+.uv-low {
+  background-color: limegreen;
+  border-radius: 5px;
+  padding: 3px 12px;
+}
+
+.uv-med {
+  background-color: yellow;
+  border-radius: 5px;
+  padding: 3px 12px;
+}
+
+.uv-high {
+  background-color: orange;
+  border-radius: 5px;
+  padding: 3px 12px;
+}
+
+.uv-extreme {
+background-color: red;
+border-radius: 5px;
+padding: 3px 12px;
+color: white;
+}
+
+
+
+.btn-search {
+  background-color: var(--lt-blue);
+  color: white;
+  border: none;
+  display: block;
+  margin: 15px 0px;
+  padding: 6px 0px;
+  font-size: 17px;
+}
+
+
+hr {
+  background-color: black;
+  height: .5px;
+}
