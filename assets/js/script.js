@@ -1,3 +1,8 @@
+dayjs.extend(window.dayjs_plugin_utc);
+dayjs.extend(window.dayjs_plugin_timezone);
+
+
+
 var cityForm = document.querySelector("#city-form");
 var cityInput = document.querySelector("#city-input");
 var cityNameEl = document.querySelector("#city-name");
@@ -7,17 +12,40 @@ var tempEl = document.querySelector("#temp");
 var windEl = document.querySelector("#wind");
 var humidityEl = document.querySelector("#humidity");
 var uvIndexEl = document.querySelector("#uv-index");
-var currentDate = new Date();
+var dailyWeatherEl = document.querySelector("#daily-weather");
+var cityArray = [];
+var cityHistoryEl = document.querySelector("#city-history");
 
 function formSubmitHandler(event) {
   event.preventDefault();
   var city = cityInput.value.trim();
-
+  
   if (city) {
+    saveCityHistory(city);
     getWeather(city);
     cityInput.value = "";
   } else {
     alert("Please enter a city");
+  }
+};
+
+function saveCityHistory(city) {
+  cityArray.push(city);
+  console.log(cityArray)
+  localStorage.setItem("cityArray", JSON.stringify(cityArray));
+ 
+};
+
+function loadCityHistory() {
+  var saveCityHistory = JSON.parse(localStorage.getItem("cityArray"));
+  console.log(saveCityHistory)
+  if (cityArray) {
+    for (let i = 0; cityArray.length; i++) {
+      var historyButtonEl = document.createElement("button");
+      historyButtonEl.textContent = cityArray[i];
+      cityHistoryEl.appendChild(historyButtonEl);
+      
+    }
   }
 };
 
@@ -26,12 +54,10 @@ function getWeather(location) {
   var apiUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + location + "&appid=f3abb8e7ac5dca95fb34c9719d493299&units=imperial";
 
   fetch(apiUrl).then(function (response) {
-    // request was succesful
     if (response.ok) {
       response.json().then(function (data) {
-        getLatLong(data, location);
+        getLatLong(data);
         displayWeather(data, location);
-        showDate();
       });
     }
   })
@@ -46,14 +72,29 @@ function getLatLong(data) {
     if (response.ok) {
       response.json().then(function (data) {
         displayUV(data);
+        
+        displayDailyWeather(data.daily, data.timezone);
       });
     }
   })
 };
 
-function showDate() {
-  var rightNow = moment().format("(M/D/YYYY)");
-  currentDateEl.textContent = rightNow;
+function displayDailyWeather(dailyWeather, timezone) {
+  console.log(dayjs().tz(timezone).add(1, "day").startOf("day").format("M/D/YYYY"))
+  for (let i = 0; i < 5; i++) {
+    console.log(dailyWeather[i])
+
+    var dateEl = document.createElement("h5");
+    var humidityDailyEl = document.createElement("p");
+    var rightNow1 = dayjs().tz(timezone).add(i, "day").startOf("day").format("M/D/YYYY");
+
+    dateEl.textContent = rightNow1;
+    humidityDailyEl.textContent = dailyWeather[i].humidity;
+
+    dailyWeatherEl.appendChild(dateEl);
+    dailyWeatherEl.appendChild(humidityDailyEl);
+    
+  }
 };
 
 
@@ -63,10 +104,15 @@ function displayWeather(data) {
   windEl.textContent = "Wind: " + data.wind.speed + " MPH";
   humidityEl.textContent = "Humidity: " + data.main.humidity + " %";
 
+  var timezone = data.timezon
+  
+  var rightNow = dayjs().tz(timezone).add(1, "day").startOf("day").format("M/D/YYYY");
+  currentDateEl.textContent = rightNow;
+
   var iconCode = data.weather[0].icon;
   var iconUrl = "http://openweathermap.org/img/wn/" + iconCode + ".png";
   $('#wicon').attr('src', iconUrl);
-  console.log(data.weather[0].icon)
+  
 };
 
 
@@ -89,13 +135,3 @@ function displayUV(data) {
 
 
 cityForm.addEventListener("submit", formSubmitHandler);
-
-
-// NEED TO DISPLAY: 
-// - City name
-// - Date
-// - Icon rep. of weather conditions
-// - Temp
-// - Humidity
-// - Wind speed
-// - UV index
