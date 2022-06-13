@@ -44,6 +44,13 @@ header h1 {
   filter: drop-shadow(0px 1px 2px black)
 }
 
+.card {
+  margin-left: 15px;
+  padding: 15px;
+  font-weight: bolder;
+  color: white;
+  background-color: var(--deep-blue);
+}
 
 .uv-low {
   background-color: limegreen;
@@ -70,7 +77,6 @@ padding: 3px 12px;
 color: white;
 }
 
-
 .btn-search {
   background-color: var(--lt-blue);
   color: white;
@@ -81,6 +87,15 @@ color: white;
   font-size: 17px;
 }
 
+.btn-history {
+  background-color: var(--grey);
+  color: black;
+  border: none;
+  display: block;
+  margin: 15px 0px;
+  padding: 6px 0px;
+  font-size: 17px;
+}
 
 hr {
   background-color: black;
